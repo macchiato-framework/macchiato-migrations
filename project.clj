@@ -1,4 +1,4 @@
-(defproject macchiato/migrations "0.0.1"
+(defproject macchiato/migrations "0.0.2"
   :description "SQL migrations library"
   :url "https://github.com/yogthos/macchiato-framework/macchiato-migrations"
   :scm {:name "git"
@@ -9,7 +9,7 @@
   :dependencies [[com.taoensso/timbre "4.8.0"]
                  [org.clojure/clojure "1.8.0" :scope "provided"]
                  [org.clojure/clojurescript "1.9.456" :scope "provided"]
-                 [macchiato/fs "0.0.6"]]
+                 [macchiato/fs "0.0.7"]]
   :plugins [[codox "0.6.4"]
             [lein-doo "0.1.7"]
             [lein-npm "0.6.2"]
