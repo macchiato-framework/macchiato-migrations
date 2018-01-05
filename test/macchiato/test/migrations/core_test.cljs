@@ -5,11 +5,15 @@
     [cljs.test :refer-macros [async is are deftest testing use-fixtures]]))
 
 (deftest migrations
-  (migrations/migrate
-   {:host "127.0.0.1"
-    :port 5432
-    :username "admin"
-    :password "admin"
-    :database "postgres"
-    :driver "pg"
-    :migration-dir (path/resolve "test/migrations")}))
+  (async done
+         (migrations/migrate
+          {:host "127.0.0.1"
+           :port 5432
+           :username "postgres"
+           :password "postgres"
+           :database "homebox"
+           :driver "pg"
+           :migration-dir (path/resolve "test/migrations")}
+          :max
+          (fn []
+            (done)))))
