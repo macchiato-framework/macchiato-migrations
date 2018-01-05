@@ -42,8 +42,8 @@
   (error (js->clj (.-appliedMigrations e))))
 
 (defn- info-handler [message]
-  (fn [info]
-    (info message (js->clj info))))
+  (fn [i]
+    (info message (js->clj i))))
 
 (defn migrate
   ([config] (migrate config :max nil))
