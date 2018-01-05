@@ -1,4 +1,4 @@
-(defproject macchiato/migrations "0.0.2"
+(defproject macchiato/migrations "0.0.4"
   :description "SQL migrations library"
   :url "https://github.com/yogthos/macchiato-framework/macchiato-migrations"
   :scm {:name "git"
@@ -15,9 +15,10 @@
             [lein-npm "0.6.2"]
             [lein-cljsbuild "1.1.4"]]
 
-  :npm {:dependencies [[postgrator "2.8.2"]]}
+  :npm {:dependencies [[postgrator "3.1.0"]]}
   :profiles {:test
-             {:cljsbuild
+             {:npm {:dependencies [[pg "7.4.0"]]}
+              :cljsbuild
                    {:builds
                     {:test
                      {:source-paths ["src" "test"]
@@ -32,11 +33,11 @@
   :aliases
   {"test"
    ["do"
-    ["npm" "install"]
+    ["with-profile" "test" "npm" "install"]
     ["clean"]
     ["with-profile" "test" "doo" "node" "once"]]
    "test-watch"
    ["do"
-    ["npm" "install"]
+    ["with-profile" "test" "npm" "install"]
     ["clean"]
     ["with-profile" "test" "doo" "node"]]})

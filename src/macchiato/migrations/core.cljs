@@ -2,35 +2,58 @@
   (:require [cljs.nodejs :as node]
             [macchiato.fs.path :as path]
             [taoensso.timbre :as timbre
-             :refer-macros [info error]]))
+             :refer-macros [info error]]
+            ["postgrator" :as Postgrator]))
 
-(def ^:private postgrator (node/require "postgrator"))
-
-(defn- translate-config [{:keys [migration-dir schema-table driver host port database username password connection-string]
-                          :or   {migration-dir (str (js/__dirname "+" path/separator "migrations"))
+(defn- translate-config [{:keys [migration-dir
+                                 schema-table
+                                 driver
+                                 host
+                                 port
+                                 database
+                                 username
+                                 password
+                                 connection-string
+                                 request-timeout
+                                 options
+                                 ssl]
+                          :or   {migration-dir (str js/__dirname path/separator "migrations")
                                  schema-table  "schema_migrations"}}]
   (clj->js
-    {:migrationDirectory migration-dir
-     :schemaTable        schema-table
-     :driver             driver
-     :host               host
-     :database           database
-     :username           username
-     :password           password
-     :connectionString   connection-string}))
+    (merge
+     {:migrationDirectory migration-dir
+      :schemaTable        schema-table
+      :driver             driver}
+     (if connection-string
+       {:connectionString connection-string}
+       {:host     host
+        :database database
+        :username username
+        :password password})
+     (when ssl
+       {:ssl ssl})
+     (when request-timeout
+       {:requestTimeout request-timeout})
+     (when options
+       {:options (clj->js options)}))))
 
-(defn- on-end-migrations [cb]
-  (fn [err migrations]
-    (if err
-      (error err)
-      (info migrations))
-    (.endConnection postgrator (or cb #()))))
+(defn- error-handler [e]
+  (error e "An error occured while running migrations!")
+  (error (js->clj (.-appliedMigrations e))))
+
+(defn- info-handler [message]
+  (fn [info]
+    (info message (js->clj info))))
 
 (defn migrate
-  ([config] (migrate config "max" nil))
+  ([config] (migrate config :max nil))
   ([config version] (migrate config version nil))
   ([config version cb]
-   (.setConfig postgrator (translate-config config))
-   (.migrate version (on-end-migrations cb))))
-
-
+   (let [postgrator (Postgrator. (translate-config config))]
+     (.on postgrator "migration-started" (info-handler "starting migration:"))
+     (.on postgrator "migration-finished" (info-handler "ending migration:"))
+     (-> (if (= :max version)
+           (.migrate postgrator)
+           (.migrate postgrator version))
+         (.then (or #(cb (js->clj %)) (info-handler "applied migrations:")))
+         (.catch error-handler)))))

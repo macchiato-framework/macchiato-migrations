@@ -1,8 +1,18 @@
-machine:
-  java:
-    version: openjdk8
-  node:
-    version: 7.2.1
-test:
-  override:
-    - lein test
+version: 2
+jobs:
+  test:
+    docker:
+      - image: theasp/clojurescript-nodejs:latest
+      - image: postgres:9.5-alpine
+        environment:
+          POSTGRES_USER: admin
+          POSTGRES_DB: postgres
+    steps:
+      - checkout
+      - run: lein test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test

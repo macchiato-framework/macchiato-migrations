@@ -30,15 +30,17 @@ Optional-description can be a label or tag to help keep track of what happens in
 
 
 
-* ``:migration-dir` "migrations" ;default
-* ``:schema-table` "schema_migrations"
-* ``:driver` "pg" ;db driver
-* ``:host` "127.0.0.1"
-* ``:port` 5432 ;optional
-* ``:database` "databasename"
-* ``:username` "user"
-* ``:password` "password"
-* ``:connection-string` "tcp://username:password@hosturl/databasename"
+* `:migration-dir` "migrations" ;default
+* `:schema-table` "schema_migrations"
+* `:driver` "pg" ;db driver
+* `:host` "127.0.0.1"
+* `:port` 5432 ;optional
+* `:database` "databasename"
+* `:username` "user"
+* `:password` "password"
+* `:connection-string` "tcp://username:password@hosturl/databasename"
+* `:request-timeout` - timeout in milliseconds
+* `:ssl` - boolean
 
 ## Usage
 
@@ -61,5 +63,5 @@ Optional-description can be a label or tag to help keep track of what happens in
 (migrations/migrate config "001" #(println "migrations complete"))
 
 ;; migrate to the latest version and provide a callback to run when finished
-(migrations/migrate config "max" #(println "migrations complete"))
+(migrations/migrate config :max #(println "migrations complete"))
 ```
