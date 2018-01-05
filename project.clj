@@ -6,10 +6,10 @@
   :license {:name "MIT License"
             :url "http://opensource.org/licenses/MIT"}
   :clojurescript? true
-  :dependencies [[com.taoensso/timbre "4.8.0"]
-                 [org.clojure/clojure "1.8.0" :scope "provided"]
-                 [org.clojure/clojurescript "1.9.456" :scope "provided"]
-                 [macchiato/fs "0.0.7"]]
+  :dependencies [[com.taoensso/timbre "4.10.0"]
+                 [org.clojure/clojure "1.9.0" :scope "provided"]
+                 [org.clojure/clojurescript "1.9.946" :scope "provided"]
+                 [macchiato/fs "0.2.1"]]
   :plugins [[codox "0.6.4"]
             [lein-doo "0.1.7"]
             [lein-npm "0.6.2"]
