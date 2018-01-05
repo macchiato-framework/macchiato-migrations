@@ -43,7 +43,7 @@
 
 (defn- info-handler [message]
   (fn [i]
-    (info message (js->clj i))))
+    (info message (dissoc (js->clj i) "getSql"))))
 
 (defn migrate
   ([config] (migrate config :max nil))
