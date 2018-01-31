@@ -1,4 +1,4 @@
-(defproject macchiato/migrations "0.0.4"
+(defproject macchiato/migrations "0.0.5"
   :description "SQL migrations library"
   :url "https://github.com/yogthos/macchiato-framework/macchiato-migrations"
   :scm {:name "git"
