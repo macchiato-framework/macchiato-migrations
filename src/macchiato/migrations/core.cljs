@@ -46,9 +46,10 @@
     (info message (dissoc (js->clj i) "getSql"))))
 
 (defn migrate
-  ([config] (migrate config :max nil))
-  ([config version] (migrate config version nil))
-  ([config version cb]
+  ([config] (migrate config :max nil error-handler))
+  ([config version] (migrate config version nil error-handler))
+  ([config version cb] (migrate config version cb error-handler))
+  ([config version cb err-cb]
    (let [postgrator (Postgrator. (translate-config config))]
      (.on postgrator "migration-started" (info-handler "starting migration:"))
      (.on postgrator "migration-finished" (info-handler "ending migration:"))
@@ -56,4 +57,4 @@
            (.migrate postgrator)
            (.migrate postgrator version))
          (.then (or #(cb (js->clj %)) (info-handler "applied migrations:")))
-         (.catch error-handler)))))
+         (.catch err-cb)))))
