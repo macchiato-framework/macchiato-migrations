@@ -12,10 +12,19 @@
                  [macchiato/fs "0.2.1"]]
   :plugins [[codox "0.6.4"]
             [lein-doo "0.1.7"]
-            [lein-npm "0.6.2"]
+            [macchiato/lein-npm "0.6.6"]
             [lein-cljsbuild "1.1.4"]]
 
-  :npm {:dependencies [[postgrator "3.1.0"]]}
+  :npm {:name "@macchiato/migrations"
+        :write-package-json true
+        :private false
+        :directories {:lib "src"}
+        :files ["src/*"]
+        :author {:name "Dmitri Sotnikov"
+                 :email "dmitri.sotnikov@gmail.com"
+                 :url "http://yogthos.net/"}
+        :dependencies [[postgrator "3.1.0"]]}
+
   :profiles {:test
              {:npm {:dependencies [[pg "7.4.0"]]}
               :cljsbuild
